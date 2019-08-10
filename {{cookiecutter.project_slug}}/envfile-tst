@@ -1,0 +1,11 @@
+PGDATA=/var/lib/postgresql/data/app-tst
+POSTGRES_DB=app
+POSTGRES_USER=app_user
+POSTGRES_PASSWORD=passw0rd
+
+FLASK_DEBUG=0
+FLASK_ENV=development
+FLASK_CONFIG_DEFAULT=Test
+
+SERVER_NAME=dv
+SERVER_NAME_EXTRA=:8080

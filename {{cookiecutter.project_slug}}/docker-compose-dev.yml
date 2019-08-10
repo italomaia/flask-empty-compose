@@ -1,0 +1,14 @@
+version: '3.6'
+
+services:
+  app:
+    env_file:
+    - ./envfile-dev
+    volumes:
+    - type: bind
+      source: ./app
+      target: /home/nonroot/code
+  server:
+    ports:
+    - 8080:80
+    - 8081:443

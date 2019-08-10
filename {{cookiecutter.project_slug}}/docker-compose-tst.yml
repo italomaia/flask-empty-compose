@@ -1,0 +1,10 @@
+version: '3.6'
+
+services:
+  app:
+    env_file:
+    - ./envfile-tst
+    environment:
+    - FLASK_DEBUG=0
+    - FLASK_ENV=development
+    - FLASK_CONFIG_DEFAULT=Test

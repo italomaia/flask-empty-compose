@@ -1,0 +1,79 @@
+version: '3.6'
+
+networks:
+  backend:
+    driver: bridge
+    internal: true
+  connected:
+    driver: bridge
+    internal: true
+  exposed:
+    driver: bridge
+
+volumes:
+{%- if cookiecutter.use_sql in ["yes", "y"] %}
+  db-data-pg:
+    driver: local
+{%- endif %}
+{%- if cookiecutter.use_nosql in ["yes", "y"] %}
+  db-data-mongo:
+    driver: local
+{%- endif %}
+  static-data:
+    driver: local
+  media-data:
+    driver: local
+  certbot-conf:
+    driver: local
+  certbot-www:
+    driver: local
+
+services:
+  app:
+    build:
+      context: ./{{ cookiecutter.app_path }}
+    env_file:
+    - ./envfile
+    networks:
+    - backend
+    - connected
+    volumes:
+    - media-data:/home/nonroot/code/media
+{%- if cookiecutter.use_sql in ["yes", "y"] %}
+  db-pg:
+    networks:
+    - backend
+    image: postgres:10
+    volumes:
+    - db-data-pg:/var/lib/postgresql/data/
+{%- endif %}
+{%- if cookiecutter.use_nosql in ["yes", "y"] %}
+  db-mongo:
+    networks:
+    - backend
+    image: mongo:4
+    volumes:
+    - db-data-mongo:/data/db
+{%- endif %}
+{%- if cookiecutter.use_async_tasks %}
+  queue:
+    networks:
+    - backend
+    image: redis:5
+{%- endif %}
+  server:
+    build:
+      context: ./server
+    env_file:
+    - ./envfile
+    networks:
+    - connected
+    - exposed
+    volumes:
+    - static-data:/var/static
+    - media-data:/var/media
+#  load_balancer:
+#    build:
+#      context: ./load_balancer
+#    volumes:
+#    - /var/run/docker.sock:/var/run/docker.sock:ro
