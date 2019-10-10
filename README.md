@@ -26,7 +26,7 @@ This template provides you with:
 pip install cookiecutter  # might be called pip3 in your system
 
 # install if fabric not installed
-pip install fabric  # might be called pip3 in your system
+pip install fabric3  # might be called pip3 in your system
 
 # create project from the template - linux/Mac
 cookiecutter https://github.com/italomaia/flask-empty-compose
@@ -38,16 +38,33 @@ fab setup
 ```
 
 ```
-# now you're ready to go
-fab env:dev up  # docker-compose up in development mode
-fab env:prd up  # docker-compose up in production mode
+# check all available commands
+fab --list
 
-fab env:dev build  # docker-compose build in development mode
-fab env:prd build  # docker-compose build in production mode
+# available environments are: dev, sta, prd
+fab env:dev up  # docker-compose up in development environment
+fab env:sta up  # docker-compose up in stage environment
+fab env:prd up  # docker-compose up in production environment
 
-fab env:dev on:<service_name> run:"<command>"  # docker-compose run in development mode
-fab env:prd on:<service_name> run:"<command>"  # docker-compose run in production mode
+fab env:dev build  # docker-compose build in development environment
+fab env:sta build  # docker-compose build in stage environment
+fab env:prd build  # docker-compose build in production environment
 
-fab env:dev logs:name  # docker logs on container called <name> in development mode
-fab env:prd logs:name  # docker logs on container called <name> in production mode
+fab env:dev on:<service_name> run:"<command>"  # docker-compose run in development environment
+fab env:sta on:<service_name> run:"<command>"  # docker-compose run in stage environment
+fab env:prd on:<service_name> run:"<command>"  # docker-compose run in production environment
+
+fab env:dev logs:name  # docker logs on container called <name> in development environment
+fab env:sta logs:name  # docker logs on container called <name> in stage environment
+fab env:prd logs:name  # docker logs on container called <name> in production environment
 ```
+
+# Environments
+
+By loading an environment, what you're actually doing is telling fabric which files
+to use to load you containers, that is, which **docker-compose** and **envfile** to
+load. Each has a minimal preset adequate to its name.
+
+- **dev** use during development; it creates containers with development adequate configuration;
+- **sta** or stage, creates containers with configuration very similiar to production and are adequate for testing;
+- **prd** or production, creates containers that can run in production environment, that is, point to live data, do any necessary optimization and security checks needed;
