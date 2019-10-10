@@ -9,6 +9,8 @@ services:
       source: ./app
       target: /home/nonroot/code
   server:
+    env_file:
+    - ./envfile-dev
     ports:
     - 8080:80
     - 8081:443
