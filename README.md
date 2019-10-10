@@ -41,21 +41,21 @@ fab setup
 # check all available commands
 fab --list
 
-# available environments are: dev, sta, prd
+# available environments are: dev, tst, prd
 fab env:dev up  # docker-compose up in development environment
-fab env:sta up  # docker-compose up in stage environment
+fab env:tst up  # docker-compose up in testing environment
 fab env:prd up  # docker-compose up in production environment
 
 fab env:dev build  # docker-compose build in development environment
-fab env:sta build  # docker-compose build in stage environment
+fab env:tst build  # docker-compose build in testing environment
 fab env:prd build  # docker-compose build in production environment
 
 fab env:dev on:<service_name> run:"<command>"  # docker-compose run in development environment
-fab env:sta on:<service_name> run:"<command>"  # docker-compose run in stage environment
+fab env:tst on:<service_name> run:"<command>"  # docker-compose run in testing environment
 fab env:prd on:<service_name> run:"<command>"  # docker-compose run in production environment
 
 fab env:dev logs:name  # docker logs on container called <name> in development environment
-fab env:sta logs:name  # docker logs on container called <name> in stage environment
+fab env:tst logs:name  # docker logs on container called <name> in testing environment
 fab env:prd logs:name  # docker logs on container called <name> in production environment
 ```
 
@@ -66,5 +66,5 @@ to use to load you containers, that is, which **docker-compose** and **envfile**
 load. Each has a minimal preset adequate to its name.
 
 - **dev** use during development; it creates containers with development adequate configuration;
-- **sta** or stage, creates containers with configuration very similiar to production and are adequate for testing;
+- **tst** or testing, creates containers with configuration very similiar to production and are adequate for testing;
 - **prd** or production, creates containers that can run in production environment, that is, point to live data, do any necessary optimization and security checks needed;
