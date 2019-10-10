@@ -32,6 +32,16 @@ services:
   app:
     build:
       context: ./{{ cookiecutter.app_path }}
+    depends_on:
+      {%- if cookiecutter.use_sql in ["yes", "y"] %}
+      - db-pg
+      {%- endif %}
+      {%- if cookiecutter.use_nosql in ["yes", "y"] %}
+      - db-mongo
+      {%- endif %}
+      {%- if cookiecutter.use_async_tasks %}
+      - queue
+      {%- endif %}
     env_file:
     - ./envfile
     networks:
@@ -64,6 +74,8 @@ services:
   server:
     build:
       context: ./server
+    depends_on:
+    - app
     env_file:
     - ./envfile
     networks:
@@ -72,8 +84,3 @@ services:
     volumes:
     - static-data:/var/static
     - media-data:/var/media
-#  load_balancer:
-#    build:
-#      context: ./load_balancer
-#    volumes:
-#    - /var/run/docker.sock:/var/run/docker.sock:ro
