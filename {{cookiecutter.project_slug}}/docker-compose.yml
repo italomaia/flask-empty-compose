@@ -1,7 +1,7 @@
 version: '3.6'
 
 networks:
-  backend:
+  protected:
     driver: bridge
     internal: true
   connected:
@@ -45,14 +45,14 @@ services:
     env_file:
     - ./envfile
     networks:
-    - backend
+    - protected
     - connected
     volumes:
     - media-data:/home/nonroot/code/media
 {%- if cookiecutter.use_sql in ["yes", "y"] %}
   db-pg:
     networks:
-    - backend
+    - protected
     image: postgres:10
     volumes:
     - db-data-pg:/var/lib/postgresql/data/
@@ -60,7 +60,7 @@ services:
 {%- if cookiecutter.use_nosql in ["yes", "y"] %}
   db-mongo:
     networks:
-    - backend
+    - protected
     image: mongo:4
     volumes:
     - db-data-mongo:/data/db
@@ -68,7 +68,7 @@ services:
 {%- if cookiecutter.use_async_tasks %}
   queue:
     networks:
-    - backend
+    - protected
     image: redis:5
 {%- endif %}
   server:
