@@ -71,7 +71,7 @@ def replace_line(lines: list, line: str, condition: str) -> None:
             break
 
 
-@task(alias='setup')
+@task(name='setup')
 def do_setup():
     """
     Helps you setup your environment. Call it once per project.
@@ -116,7 +116,7 @@ def do_setup():
     )
 
 
-@task(alias='env')
+@task(name='env')
 def set_renv(local_renv):
     "Sets docker-compose environment"
     global renv
@@ -124,7 +124,7 @@ def set_renv(local_renv):
     renv = local_renv
 
 
-@task(alias='up')
+@task(name='up')
 def compose_up(name: str = None) -> None:
     """
     Calls docker compose up using the correct environment.
@@ -138,7 +138,7 @@ def compose_up(name: str = None) -> None:
         call(local_cmd)
 
 
-@task(alias='build')
+@task(name='build')
 def compose_build(name: str = None) -> None:
     """
     Calls docker compose build using the correct environment.
@@ -150,7 +150,7 @@ def compose_build(name: str = None) -> None:
         call(local_cmd)
 
 
-@task(alias='on')
+@task(name='on')
 def on_service(name: str) -> None:
     """
     Define service where command should run
@@ -160,7 +160,7 @@ def on_service(name: str) -> None:
     service_name = name
 
 
-@task(alias='run')
+@task(name='run')
 def compose_run(cmd: str) -> None:
     """
     Calls docker compose run using the correct environment.
@@ -181,7 +181,7 @@ def compose_run(cmd: str) -> None:
         call(local_cmd)
 
 
-@task(alias='logs')
+@task(name='logs')
 def docker_logs(name: None) -> None:
     """
     Get docker container logs.
