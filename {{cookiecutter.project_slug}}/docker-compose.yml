@@ -23,10 +23,6 @@ volumes:
     driver: local
   media-data:
     driver: local
-  certbot-conf:
-    driver: local
-  certbot-www:
-    driver: local
 
 services:
   app:
