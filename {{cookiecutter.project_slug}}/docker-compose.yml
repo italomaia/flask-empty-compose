@@ -35,7 +35,7 @@ services:
       {%- if cookiecutter.use_nosql in ["yes", "y"] %}
       - db-mongo
       {%- endif %}
-      {%- if cookiecutter.use_async_tasks in ["yes", "y"] %}
+      {%- if cookiecutter.use_redis in ["yes", "y"] %}
       - queue
       {%- endif %}
     env_file:
@@ -61,7 +61,7 @@ services:
     volumes:
     - db-data-mongo:/data/db
 {%- endif %}
-{%- if cookiecutter.use_async_tasks in ["yes", "y"] %}
+{%- if cookiecutter.use_redis in ["yes", "y"] %}
   queue:
     networks:
     - protected
