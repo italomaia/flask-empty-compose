@@ -6,5 +6,6 @@
     "use_sql_sqlite": "no",
     "use_sql_mysql": "no",
     "use_nosql_mongodb": "no",
-    "use_redis": "no"
+    "use_redis": "no",
+    "use_websocket": "no"
 }
