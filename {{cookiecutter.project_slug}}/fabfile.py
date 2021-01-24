@@ -26,6 +26,9 @@ renv = 'dev'  # dev by default
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 APP_DIR = os.path.join(CURRENT_DIR, 'app')
 
+# development hostname
+local_hostname = "dv.local"
+
 
 def create_compose_cmd() -> list:
     return compose_cmd + ['docker-compose-%s.yml' % renv]
@@ -82,12 +85,14 @@ def do_setup():
 
     local(' '.join(["cookiecutter", "https://github.com/italomaia/flask-empty"]))
 
+    
+
     print(
         "IMPORTANT:"
         "\n" "\t"
         "Use the following command to add 'dv' as a alias in your hosts file:"
         "\n" "\t"
-        "sudo echo \"127.0.0.1  dv\" >> /etc/hosts"
+        f"sudo echo \"127.0.0.1  {local_hostname}\" >> /etc/hosts"
     )
 
     print(
@@ -112,7 +117,7 @@ def do_setup():
         "fab env:prd up  # for production mode"
 
         "\n" "\n"
-        "Locally, your project will be available at http://dv:8080"
+        f"Locally, your project will be available at http://{local_hostname}:8080"
     )
 
 
