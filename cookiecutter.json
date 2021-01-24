@@ -1,7 +1,10 @@
 {
     "project_slug": "project",
     "app_path": "app",
-    "use_sql": "no",
-    "use_nosql": "no",
+    "use_sql_cockroachdb": "no",
+    "use_sql_postgres": "no",
+    "use_sql_sqlite": "no",
+    "use_sql_mysql": "no",
+    "use_nosql_mongodb": "no",
     "use_redis": "no"
 }

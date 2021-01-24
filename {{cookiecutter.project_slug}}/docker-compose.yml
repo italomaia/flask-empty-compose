@@ -1,5 +1,24 @@
 version: '3.6'
 
+{%- set uses_cockroachdb = cookiecutter.use_sql_cockroachdb in ('y', 'yes') -%}
+{%- set uses_postgres = cookiecutter.use_sql_postgres in ('y', 'yes') -%}
+{%- set uses_mysql = cookiecutter.use_sql_mysql in ('y', 'yes') -%}
+{%- set uses_mongodb = cookiecutter.use_nosql_mongodb in ('y', 'yes') -%}
+{%- set uses_redis = cookiecutter.use_redis in ('y', 'yes') -%}
+{%- set uses_db = uses_cockroachdb or uses_postgres or uses_mysql or uses_mongodb -%}
+
+{%- set db_image = '' -%}
+{%- set db_image = uses_cockroachdb and 'cockroachdb/cockroach' or db_image -%}
+{%- set db_image = uses_postgres and 'postgres' or db_image -%}
+{%- set db_image = uses_mysql and 'mysql' or db_image -%}
+{%- set db_image = uses_mongodb and 'mongo' or db_image -%}
+
+{%- set db_volume_path = '' -%}
+{%- set db_volume_path = uses_cockroachdb and '/cockroach/cockroach-data' or db_volume_path -%}
+{%- set db_volume_path = uses_postgres and '/var/lib/postgresql/data/' or db_volume_path -%}
+{%- set db_volume_path = uses_mysql and '/var/lib/mysql' or db_volume_path -%}
+{%- set db_volume_path = uses_mongodb and '/data/db' or db_volume_path -%}
+
 networks:
   protected:
     driver: bridge
@@ -11,12 +30,8 @@ networks:
     driver: bridge
 
 volumes:
-{%- if cookiecutter.use_sql in ["yes", "y"] %}
-  db-data-pg:
-    driver: local
-{%- endif %}
-{%- if cookiecutter.use_nosql in ["yes", "y"] %}
-  db-data-mongo:
+{%- if uses_db %}
+  db-main-data:
     driver: local
 {%- endif %}
   static-data:
@@ -29,11 +44,8 @@ services:
     build:
       context: ./{{ cookiecutter.app_path }}
     depends_on:
-      {%- if cookiecutter.use_sql in ["yes", "y"] %}
-      - db-pg
-      {%- endif %}
-      {%- if cookiecutter.use_nosql in ["yes", "y"] %}
-      - db-mongo
+      {%- if uses_db %}
+      - db-main
       {%- endif %}
       {%- if cookiecutter.use_redis in ["yes", "y"] %}
       - queue
@@ -45,27 +57,21 @@ services:
     - connected
     volumes:
     - media-data:/home/nonroot/code/media
-{%- if cookiecutter.use_sql in ["yes", "y"] %}
-  db-pg:
+{%- if uses_db %}
+  db-main:
     networks:
     - protected
-    image: postgres:10
+    image: {{ db_image }}
     volumes:
-    - db-data-pg:/var/lib/postgresql/data/
+    - db-main-data:{{ db_volume_path }}
 {%- endif %}
-{%- if cookiecutter.use_nosql in ["yes", "y"] %}
-  db-mongo:
-    networks:
-    - protected
-    image: mongo:4
-    volumes:
-    - db-data-mongo:/data/db
-{%- endif %}
-{%- if cookiecutter.use_redis in ["yes", "y"] %}
+{%- if uses_redis %}
   queue:
     networks:
     - protected
-    image: redis:5
+    image: redis
+    volumes:
+    - redis-data:/data
 {%- endif %}
   server:
     build:

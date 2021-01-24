@@ -6,7 +6,7 @@ services:
     - ./envfile-dev
     volumes:
     - type: bind
-      source: ./app
+      source: ./{{ cookiecutter.app_path }}
       target: /home/nonroot/code
   server:
     env_file:
